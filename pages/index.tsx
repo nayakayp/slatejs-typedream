@@ -52,12 +52,17 @@ const App = () => {
   })
 
   return (
-    <Slate editor={editor} value={initialValue}>
-      <Editable 
-        renderElement={renderElement}
-        onKeyDown={event => handleKeyDown(event)}
-      />
-    </Slate>
+    <>
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
+      <Slate editor={editor} value={initialValue}>
+        <Editable 
+          renderElement={renderElement}
+          onKeyDown={event => handleKeyDown(event)}
+        />
+      </Slate>
+    </>
   )
 }
 
