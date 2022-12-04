@@ -5,6 +5,17 @@ import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
 import DefaultFormat from '../components/DefaultFormat';
 import CodeFormat from '../components/CodeFormat';
 
+type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] }
+type CustomText = { text: string }
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor
+    Element: CustomElement
+    Text: CustomText
+  }
+}
+
 const initialValue = [{
   type:'paragraph',
   children:[{
@@ -31,7 +42,7 @@ const App = () => {
     }
   }
 
-  const renderElement = useCallback((props: JSX.IntrinsicAttributes & { attributes: any; children: any; }) => {
+  const renderElement = useCallback((props: JSX.IntrinsicAttributes & { attributes: any; children: any; element: any }) => {
     switch(props.element.type){
       case 'code':
         return <CodeFormat {...props}/>
