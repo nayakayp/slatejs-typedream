@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react'
-import { createEditor, BaseEditor, Transforms, Editor, Path } from 'slate'
+import React, { useState, useCallback, useMemo } from 'react'
+import { createEditor, BaseEditor, Transforms, Editor } from 'slate'
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
+import { withHistory } from 'slate-history'
 
 import DefaultFormat from '../components/DefaultFormat';
 import AddedLineFormat from '../components/AddedLineFormat';
@@ -19,43 +20,58 @@ declare module 'slate' {
   }
 }
 
-const initialValue = [{
-  type: 'code',
-  children:[{
-    text:'A line of text in a paragraph'
-  }]
-}]
+const initialValue = [
+  {
+    type: 'code',
+    children: [{ text: `const App = () => {` }],
+  },
+  {
+    type: 'code',
+    children: [{ text: `    const [editor] = useState(() => withReact(createEditor()))` }],
+  }
+]
+
 
 const App = () => {
   const [editor] = useState(() => withReact(createEditor()))
-  const [lineFormat, setLineFormat] = useState('normal')
 
   function handleKeyDown (e: React.KeyboardEvent) {
-    e.preventDefault()
     if(e.key === 'd' && e.ctrlKey){
-      setLineFormat('deleted')
+      e.preventDefault()
+      Transforms.setNodes(
+        editor,
+        { lineFormat: 'deleted' },
+        { match: n => Editor.isBlock(editor, n) }
+      )
     }else if(e.key === 'a' && e.ctrlKey){
-      setLineFormat('added')
+      e.preventDefault()
+      Transforms.setNodes(
+        editor,
+        { lineFormat: 'added' },
+        { match: n => Editor.isBlock(editor, n) }
+      )
     }else if(e.key === 'n' && e.ctrlKey){
-      setLineFormat('normal')
+      e.preventDefault()
+      Transforms.setNodes(
+        editor,
+        { lineFormat: 'normal' },
+        { match: n => Editor.isBlock(editor, n) }
+      )
     }
     
   }
 
-
   const renderElement = useCallback(props => {
-    switch(props.element.type){
-      case 'code':
-        if(lineFormat === 'added'){
-          return <AddedLineFormat {...props}/>
-        }else if(lineFormat === 'deleted'){
-          return <DeletedLineFormat {...props}/>
-        }
+    switch(props.element.lineFormat){
+      case 'added':
+        return <AddedLineFormat {...props}/>
+      case 'deleted':
+        return <DeletedLineFormat {...props}/>
       default:
         return <DefaultFormat {...props}/>
     }
-  },[lineFormat])
-
+  },[])
+  
   return (
     <div className='min-h-screen flex flex-col items-center bg-[#f5f5f5]'>
       <Slate editor={editor} value={initialValue}>
