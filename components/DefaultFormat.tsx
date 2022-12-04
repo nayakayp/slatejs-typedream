@@ -1,6 +1,9 @@
 import React from 'react'
 
-type Props = {}
+type Props = {
+  attributes: any;
+  children: any;
+}
 
 const DefaultFormat = (props: Props) => {
   return (

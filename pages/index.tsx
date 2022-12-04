@@ -49,7 +49,7 @@ const App = () => {
       default:
         return <DefaultFormat {...props}/>
     }
-  })
+  },[])
 
   return (
     <Slate editor={editor} value={initialValue}>
