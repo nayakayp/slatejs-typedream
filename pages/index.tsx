@@ -9,7 +9,7 @@ import DeletedLineFormat from '../components/DeletedLineFormat';
 
 import CodeFormat from '../components/CodeFormat';
 
-type CustomElement = { type: 'paragraph'; children: CustomText[] }
+type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] }
 type CustomText = { text: string }
 
 declare module 'slate' {

@@ -5,7 +5,7 @@ type Props = {
   children: any;
 }
 
-const DefaultFormat = (props: Props) => {
+const CodeFormat = (props: Props) => {
   return (
     <pre {...props.attributes}>
         <code>{props.children}</code>
@@ -13,4 +13,4 @@ const DefaultFormat = (props: Props) => {
   )
 }
 
-export default DefaultFormat
+export default CodeFormat
