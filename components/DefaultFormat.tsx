@@ -7,7 +7,9 @@ type Props = {
 
 const DefaultFormat = (props: Props) => {
   return (
-    <p {...props.attributes}>{props.children}</p>
+    <pre {...props.attributes}>
+        <code>{props.children}</code>
+    </pre>
   )
 }
 
